@@ -20,6 +20,7 @@ export const bool: {
     common(args: Shape[], tools: Shape[], opts?: { }): Shape
     cut(args: Shape[], tools: Shape[], opts?: { }): Shape
     section(args: Shape[], tools: Shape[], opts?: { }): Shape
+    split(args: Shape[], tools: Shape[], opts?: { }): Shape
 }
 
 export const step: {

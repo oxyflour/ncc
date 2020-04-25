@@ -4,6 +4,7 @@
 #include <BRepAlgoAPI_Common.hxx>
 #include <BRepAlgoAPI_Cut.hxx>
 #include <BRepAlgoAPI_Section.hxx>
+#include <BRepAlgoAPI_Splitter.hxx>
 
 #include "../topo/shape.h"
 
@@ -80,3 +81,16 @@ Napi::Value section(const Napi::CallbackInfo &info) {
     }
 }
 
+Napi::Value split(const Napi::CallbackInfo &info) {
+    BRepAlgoAPI_Splitter api;
+    TopTools_ListOfShape args, tools;
+    api.SetArguments(arr2list(info[0].As<Napi::Array>(), args));
+    api.SetTools(arr2list(info[1].As<Napi::Array>(), tools));
+
+    api.Build();
+    if (api.HasErrors()) {
+        Napi::Error::New(info.Env(), "Split Failed").ThrowAsJavaScriptException();
+    } else {
+        return Shape::Create(api.Shape());
+    }
+}

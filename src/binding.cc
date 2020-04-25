@@ -19,6 +19,7 @@ Napi::Object Init(Napi::Env env, Napi::Object exports) {
     boolean.Set("common", Napi::Function::New(env, common));
     boolean.Set("cut", Napi::Function::New(env, cut));
     boolean.Set("section", Napi::Function::New(env, section));
+    boolean.Set("split", Napi::Function::New(env, split));
     exports.Set("bool", boolean);
 
     auto step = Napi::Object::New(env);
