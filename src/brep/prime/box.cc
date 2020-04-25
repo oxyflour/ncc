@@ -8,5 +8,5 @@ Napi::Value MakeBox(const Napi::CallbackInfo &info) {
     auto p0 = obj2pt(info[0].As<Napi::Object>());
     auto p1 = obj2pt(info[1].As<Napi::Object>());
     auto shape = BRepPrimAPI_MakeBox(p0, p1).Shape();
-    return Shape::NewInstance(shape);
+    return Shape::Create(shape);
 }

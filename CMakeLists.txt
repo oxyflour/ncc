@@ -3,7 +3,7 @@ cmake_minimum_required(VERSION 3.10)
 project(binding)
 add_definitions(-DNAPI_VERSION=3)
 include_directories(${CMAKE_JS_INC})
-file(GLOB SOURCE_FILES "src/*.cc" "src/**/*.cc"  "src/**/**/*.cc" "src/step/step.cc")
+file(GLOB SOURCE_FILES src/*.cc src/bool/*.cc src/brep/*.cc src/brep/**/*.cc src/step/*.cc src/topo/*.cc)
 
 # you must have this before `add_library`
 link_directories(${CMAKE_SOURCE_DIR}/deps/occt/lin64/gcc/lib)
