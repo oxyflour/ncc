@@ -1,0 +1,19 @@
+{
+  "name": "ncc",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "typings": "index.d.ts",
+  "scripts": {
+    "install": "cmake-js compile",
+    "test": "node test/index.js"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "cmake-js": "^6.1.0",
+    "node-addon-api": "^2.0.0",
+    "node-gyp": "^6.1.0"
+  }
+}
