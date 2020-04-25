@@ -3,7 +3,7 @@
         {
             "name": "Linux",
             "includePath": [
-                "${workspaceFolder}/**",
+                "${workspaceFolder}/deps/occt/include/opencascade",
                 "${workspaceFolder}/node_modules/node-addon-api",
                 "~/.cache/node-gyp/12.16.2/include/node/"
             ],
