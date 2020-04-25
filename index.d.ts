@@ -4,7 +4,23 @@ interface XYZ {
     z: number
 }
 
+enum ShapeType {
+    COMPOUND,
+    COMPSOLID,
+    EDGE,
+    FACE,
+    SHAPE,
+    SHELL,
+    SOLID,
+    VERTEX,
+    WIRE,
+}
+
 declare class Shape {
+    static types: typeof ShapeType
+    constructor(shapes: Shape[])
+    type: ShapeType
+    find(type: ShapeType): Shape[]
 }
 
 export const brep: {
