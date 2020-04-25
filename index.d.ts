@@ -29,15 +29,15 @@ export const brep: {
     prime: {
         makeBox(p0: XYZ, p1: XYZ): Shape
     }
+    bool: {
+        fuse(args: Shape[], tools: Shape[], opts?: { fuzzyValue?: number }): Shape
+        common(args: Shape[], tools: Shape[], opts?: { }): Shape
+        cut(args: Shape[], tools: Shape[], opts?: { }): Shape
+        section(args: Shape[], tools: Shape[], opts?: { }): Shape
+        split(args: Shape[], tools: Shape[], opts?: { }): Shape
+    }
 }
 
-export const bool: {
-    fuse(args: Shape[], tools: Shape[], opts?: { fuzzyValue?: number }): Shape
-    common(args: Shape[], tools: Shape[], opts?: { }): Shape
-    cut(args: Shape[], tools: Shape[], opts?: { }): Shape
-    section(args: Shape[], tools: Shape[], opts?: { }): Shape
-    split(args: Shape[], tools: Shape[], opts?: { }): Shape
-}
 
 export const step: {
     save(file: string, shape: Shape)

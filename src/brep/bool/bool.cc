@@ -6,7 +6,7 @@
 #include <BRepAlgoAPI_Section.hxx>
 #include <BRepAlgoAPI_Splitter.hxx>
 
-#include "../topo/shape.h"
+#include "../../topo/shape.h"
 
 TopoDS_ListOfShape &arr2list(Napi::Array arr, TopoDS_ListOfShape &list) {
     for (int i = 0; i < arr.Length(); i ++) {

@@ -1,6 +1,6 @@
 #include "shape.h"
 #include <TopoDS_Compound.hxx>
-#include <BRep_Builder.hxx>
+#include <TopoDS_Builder.hxx>
 #include <TopExp_Explorer.hxx>
 
 #include "../utils.h"
@@ -9,7 +9,7 @@ Shape::Shape(const Napi::CallbackInfo &info) : Napi::ObjectWrap<Shape>(info) {
     if (info.Length() >= 1 && info[0].IsArray()) {
         auto arr = info[0].As<Napi::Array>();
         TopoDS_Compound comp;
-        BRep_Builder builder;
+        TopoDS_Builder builder;
         builder.MakeCompound(comp);
         for (int i = 0; i < arr.Length(); i ++) {
             auto shape = Shape::Unwrap(arr.Get(i).As<Napi::Object>())->shape;
