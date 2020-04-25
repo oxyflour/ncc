@@ -1,8 +1,8 @@
-#include "box.h"
+#include "prime.h"
 #include <BRepPrimAPI_MakeBox.hxx>
 
-#include "../../topo/shape.h"
-#include "../../utils.h"
+#include "../topo/shape.h"
+#include "../utils.h"
 
 Napi::Value MakeBox(const Napi::CallbackInfo &info) {
     auto p0 = obj2pt(info[0].As<Napi::Object>());

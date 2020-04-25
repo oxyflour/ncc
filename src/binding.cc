@@ -1,6 +1,7 @@
 #include <napi.h>
-#include "brep/prime/box.h"
-#include "brep/bool/bool.h"
+#include "brep/prime.h"
+#include "brep/builder.h"
+#include "brep/bool.h"
 #include "brep/brep.h"
 #include "topo/shape.h"
 #include "step/step.h"
@@ -11,6 +12,10 @@ Napi::Object Init(Napi::Env env, Napi::Object exports) {
     auto prime = Napi::Object::New(env);
     prime.Set("makeBox", Napi::Function::New(env, MakeBox));
     brep.Set("prime", prime);
+
+    auto builder = Napi::Object::New(env);
+    builder.Set("makeFace", Napi::Function::New(env, MakeFace));
+    brep.Set("builder", builder);
 
     auto boolean = Napi::Object::New(env);
     boolean.Set("fuse", Napi::Function::New(env, fuse));

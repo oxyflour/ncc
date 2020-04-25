@@ -4,7 +4,7 @@ interface XYZ {
     z: number
 }
 
-enum ShapeType {
+declare enum ShapeType {
     COMPOUND,
     COMPSOLID,
     EDGE,
@@ -26,6 +26,9 @@ declare class Shape {
 export const brep: {
     save(file: string, shape: Shape)
     load(file: string): Shape
+    builder: {
+        makeFace(pos: XYZ, dir: XYZ): Shape
+    }
     prime: {
         makeBox(p0: XYZ, p1: XYZ): Shape
     }
