@@ -7,7 +7,7 @@ include_directories(${CMAKE_JS_INC})
 file(GLOB SOURCE_FILES src/*.cc src/brep/*.cc src/step/*.cc src/topo/*.cc)
 
 # you must have this before `add_library`
-link_directories(${CMAKE_SOURCE_DIR}/deps/occt/lin64/gcc/lib)
+link_directories(${CMAKE_SOURCE_DIR}/deps/occt-7.4/lib)
 
 add_library(${PROJECT_NAME} SHARED ${SOURCE_FILES} ${CMAKE_JS_SRC})
 set_target_properties(${PROJECT_NAME} PROPERTIES PREFIX "" SUFFIX ".node")
@@ -21,5 +21,5 @@ string(REPLACE "\n" "" NODE_ADDON_API_DIR ${NODE_ADDON_API_DIR})
 string(REPLACE "\"" "" NODE_ADDON_API_DIR ${NODE_ADDON_API_DIR})
 target_include_directories(${PROJECT_NAME} PRIVATE ${NODE_ADDON_API_DIR})
 
-target_include_directories(${PROJECT_NAME} PRIVATE "deps/occt/include/opencascade")
+target_include_directories(${PROJECT_NAME} PRIVATE deps/occt-7.4/include)
 target_link_libraries(${PROJECT_NAME} TKTObjDRAW.a TKQADraw.a TKXDEDRAW.a TKDCAF.a TKDCAF.a TKXSDRAW.a TKViewerTest.a TKTopTest.a TKDraw.a TKXDESTEP.a TKBinXCAF.a TKXmlXCAF.a TKXDEIGES.a TKXCAF.a TKIGES.a TKSTEP.a TKSTEP209.a TKSTEPAttr.a TKSTEPBase.a TKXSBase.a TKStd.a TKStdL.a TKXml.a TKBin.a TKXmlL.a TKBinL.a TKCAF.a TKXCAF.a TKLCAF.a TKCDF.a TKMeshVS.a TKOpenGl.a TKV3d.a TKService.a TKXMesh.a TKMesh.a TKOffset.a TKFeat.a TKFillet.a TKHLR.a TKBool.a TKBO.a TKShHealing.a TKPrim.a TKTopAlgo.a TKGeomAlgo.a TKBRep.a TKGeomBase.a TKG3d.a TKG2d.a TKMath.a TKernel.a)

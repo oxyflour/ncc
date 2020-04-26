@@ -1,2 +1,3 @@
 build/
 node_modules/
+deps/occt-7.4/
