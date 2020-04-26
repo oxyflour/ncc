@@ -3,9 +3,9 @@ function XYZ(x, y, z) {
 }
 
 const { brep, step, Shape } = require('../'),
-    { bool, prime, builder } = brep,
-    b1 = prime.makeBox(XYZ(0, 0, 0), XYZ(1, 1, 1)),
-    b2 = prime.makeBox(XYZ(0.5, 0.5, 0.5), XYZ(1.5, 1.5, 1.5))
+    { bool, primitive, builder } = brep,
+    b1 = primitive.makeBox(XYZ(0, 0, 0), XYZ(1, 1, 1)),
+    b2 = primitive.makeBox(XYZ(0.5, 0.5, 0.5), XYZ(1.5, 1.5, 1.5))
 step.save('build/fuse.stp', bool.fuse([b1], [b2]))
 step.save('build/common.stp', bool.common([b1], [b2]))
 step.save('build/cut.stp', bool.cut([b1], [b2]))

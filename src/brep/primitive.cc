@@ -1,4 +1,4 @@
-#include "prime.h"
+#include "primitive.h"
 #include <BRepPrimAPI_MakeBox.hxx>
 
 #include "../topo/shape.h"

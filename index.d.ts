@@ -29,7 +29,7 @@ export const brep: {
         makeFace(pos: XYZ, dir: XYZ): Shape
         makeCompound(shapes: Shape[]): Shape
     }
-    prime: {
+    primitive: {
         makeBox(p0: XYZ, p1: XYZ): Shape
     }
     bool: {
