@@ -5,7 +5,7 @@
             "includePath": [
                 "${workspaceFolder}/deps/occt/include/opencascade",
                 "${workspaceFolder}/node_modules/node-addon-api",
-                "~/.cache/node-gyp/12.16.2/include/node/"
+                "~/.cmake-js/node-x64/v12.16.2/include/node"
             ],
             "defines": [],
             "compilerPath": "/usr/bin/gcc",
