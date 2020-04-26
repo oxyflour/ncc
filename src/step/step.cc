@@ -8,7 +8,7 @@
 Napi::Value LoadStep(const Napi::CallbackInfo &info) {
     std::string file = info[0].As<Napi::String>();
     STEPControl_Reader reader;
-    auto stat = reader.ReadFile(std::string().c_str());
+    auto stat = reader.ReadFile(file.c_str());
     if (stat != IFSelect_RetDone) {
         auto msg = std::string("read from ") + file + "failed";
         Napi::Error::New(info.Env(), msg).ThrowAsJavaScriptException();
