@@ -34,35 +34,27 @@ describe('brep', () => {
     })
 
     describe('brep.bool', () => {
+        const b1 = primitive.makeBox([0, 0, 0], [1, 1, 1]),
+            b2 = primitive.makeBox([0.5, 0.5, 0.5], [1.5, 1.5, 1.5])
         it('should work with fuse', () => {
-            const b1 = primitive.makeBox([0, 0, 0], [1, 1, 1]),
-                b2 = primitive.makeBox([0.5, 0.5, 0.5], [1.5, 1.5, 1.5]),
-                fused = bool.fuse([b1], [b2])
-            assert.equal(fused.find(Shape.types.FACE).length, 12)
+            const ret = bool.fuse([b1], [b2])
+            assert.equal(ret.find(Shape.types.FACE).length, 12)
         })
         it('should work with common', () => {
-            const b1 = primitive.makeBox([0, 0, 0], [1, 1, 1]),
-                b2 = primitive.makeBox([0.5, 0.5, 0.5], [1.5, 1.5, 1.5]),
-                fused = bool.common([b1], [b2])
-            assert.equal(fused.find(Shape.types.FACE).length, 6)
+            const ret = bool.common([b1], [b2])
+            assert.equal(ret.find(Shape.types.FACE).length, 6)
         })
         it('should work with cut', () => {
-            const b1 = primitive.makeBox([0, 0, 0], [1, 1, 1]),
-                b2 = primitive.makeBox([0.5, 0.5, 0.5], [1.5, 1.5, 1.5]),
-                fused = bool.cut([b1], [b2])
-            assert.equal(fused.find(Shape.types.FACE).length, 9)
+            const ret = bool.cut([b1], [b2])
+            assert.equal(ret.find(Shape.types.FACE).length, 9)
         })
         it('should work with section', () => {
-            const b1 = primitive.makeBox([0, 0, 0], [1, 1, 1]),
-                b2 = primitive.makeBox([0.5, 0.5, 0.5], [1.5, 1.5, 1.5]),
-                fused = bool.cut([b1], [b2])
-            assert.equal(fused.find(Shape.types.FACE).length, 9)
+            const ret = bool.cut([b1], [b2])
+            assert.equal(ret.find(Shape.types.FACE).length, 9)
         })
         it('should work with split', () => {
-            const b1 = primitive.makeBox([0, 0, 0], [1, 1, 1]),
-                b2 = primitive.makeBox([0.5, 0.5, 0.5], [1.5, 1.5, 1.5]),
-                fused = bool.split([b1], [b2])
-            assert.equal(fused.find(Shape.types.FACE).length, 15)
+            const ret = bool.split([b1], [b2])
+            assert.equal(ret.find(Shape.types.FACE).length, 15)
         })
     })
 })
