@@ -18,7 +18,6 @@ declare enum ShapeType {
 
 declare class Shape {
     static types: typeof ShapeType
-    constructor(shapes: Shape[])
     type: ShapeType
     find(type: ShapeType): Shape[]
 }
@@ -28,6 +27,7 @@ export const brep: {
     load(file: string): Shape
     builder: {
         makeFace(pos: XYZ, dir: XYZ): Shape
+        makeCompound(shapes: Shape[]): Shape
     }
     prime: {
         makeBox(p0: XYZ, p1: XYZ): Shape

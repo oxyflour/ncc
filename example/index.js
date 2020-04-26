@@ -12,7 +12,7 @@ step.save('build/cut.stp', bool.cut([b1], [b2]))
 step.save('build/section.stp', bool.section([b1], [b2]))
 step.save('build/split.stp', bool.split([b1], [b2]))
 
-const c = new Shape([b1, b2])
+const c = builder.makeCompound([b1, b2])
 brep.save('build/c.brep', c)
 console.log(c.type, Shape.types.COMPOUND)
 

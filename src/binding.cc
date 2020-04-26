@@ -15,6 +15,7 @@ Napi::Object Init(Napi::Env env, Napi::Object exports) {
 
     auto builder = Napi::Object::New(env);
     builder.Set("makeFace", Napi::Function::New(env, MakeFace));
+    builder.Set("makeCompound", Napi::Function::New(env, MakeCompound));
     brep.Set("builder", builder);
 
     auto boolean = Napi::Object::New(env);
