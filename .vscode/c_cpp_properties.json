@@ -3,7 +3,7 @@
         {
             "name": "Linux",
             "includePath": [
-                "${workspaceFolder}/deps/occt/include/opencascade",
+                "${workspaceFolder}/deps/occt-7.4/include",
                 "${workspaceFolder}/node_modules/node-addon-api",
                 "~/.cmake-js/node-x64/v12.16.2/include/node"
             ],
