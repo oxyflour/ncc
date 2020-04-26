@@ -13,7 +13,8 @@ Napi::Value LoadStep(const Napi::CallbackInfo &info) {
         auto msg = std::string("read from ") + file + "failed";
         Napi::Error::New(info.Env(), msg).ThrowAsJavaScriptException();
     } else {
-        return Shape::Create(reader.OneShape());
+        reader.TransferRoot();
+        return Shape::Create(reader.Shape());
     }
 }
 

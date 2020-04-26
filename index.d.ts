@@ -1,8 +1,8 @@
-interface XYZ {
+type XYZ = {
     x: number
     y: number
     z: number
-}
+} | [number, number, number]
 
 declare enum ShapeType {
     COMPOUND,
