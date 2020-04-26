@@ -11,6 +11,10 @@ describe('brep', () => {
     })
 
     describe('brep.builder', () => {
+        it('should make edge', () => {
+            const edge = builder.makeEdge([0, 0, 0], [0, 0, 1])
+            assert.equal(edge.type, Shape.types.EDGE)
+        })
         it('should make face', () => {
             const face = builder.makeFace([0, 0, 0], [1, 1, 1])
             assert.equal(face.type, Shape.types.FACE)
@@ -25,6 +29,12 @@ describe('brep', () => {
     })
 
     describe('brep.primitive', () => {
+        it('should make sphere', () => {
+            const sphere = primitive.makeSphere([0, 0, 0], 1)
+            assert.equal(sphere.find(Shape.types.FACE).length, 1)
+            assert.equal(sphere.find(Shape.types.WIRE).length, 1)
+            assert.equal(sphere.find(Shape.types.EDGE).length, 4)
+        })
         it('should make boxes', () => {
             const box = primitive.makeBox([0, 0, 0], [1, 1, 1])
             assert.equal(box.find(Shape.types.FACE).length, 6)

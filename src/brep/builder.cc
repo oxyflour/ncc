@@ -1,8 +1,10 @@
 #include "builder.h"
 
 #include <BRepBuilderAPI_MakeFace.hxx>
+#include <BRepBuilderAPI_MakeEdge.hxx>
 #include <BRep_Builder.hxx>
 
+#include <TopoDS_Edge.hxx>
 #include <TopoDS_Face.hxx>
 #include <TopoDS_Compound.hxx>
 
@@ -12,13 +14,20 @@
 #include "../utils.h"
 #include "../topo/shape.h"
 
+Napi::Value MakeEdge(const Napi::CallbackInfo &info) {
+    if (info.Length() == 2) {
+        auto p0 = obj2pt(info[0]), p1 = obj2pt(info[1]);
+        return Shape::Create(BRepBuilderAPI_MakeEdge(p0, p1).Shape());
+    } else {
+        Napi::Error::New(info.Env(), "not implemented yet").ThrowAsJavaScriptException();
+    }
+}
+
 Napi::Value MakeFace(const Napi::CallbackInfo &info) {
     if (info.Length() == 2) {
         auto pos = obj2pt(info[0]), dir = obj2pt(info[1]);
         auto plane = gp_Pln(pos, gp_Dir(dir.XYZ()));
-        auto face = BRepBuilderAPI_MakeFace(plane);
-        auto shape = TopoDS_Face(face);
-        return Shape::Create(shape);
+        return Shape::Create(BRepBuilderAPI_MakeFace(plane).Shape());
     } else {
         Napi::Error::New(info.Env(), "not implemented yet").ThrowAsJavaScriptException();
     }

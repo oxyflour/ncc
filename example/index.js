@@ -1,22 +1,16 @@
-function XYZ(x, y, z) {
-    return { x, y, z }
-}
-
-const { brep, step, Shape } = require('../'),
+const { brep, step } = require('../'),
     { bool, primitive, builder } = brep,
-    b1 = primitive.makeBox(XYZ(0, 0, 0), XYZ(1, 1, 1)),
-    b2 = primitive.makeBox(XYZ(0.5, 0.5, 0.5), XYZ(1.5, 1.5, 1.5))
-step.save('build/fuse.stp', bool.fuse([b1], [b2]))
-step.save('build/common.stp', bool.common([b1], [b2]))
-step.save('build/cut.stp', bool.cut([b1], [b2]))
-step.save('build/section.stp', bool.section([b1], [b2]))
-step.save('build/split.stp', bool.split([b1], [b2]))
-
-const c = builder.makeCompound([b1, b2])
-brep.save('build/c.brep', c)
-console.log(c.type, Shape.types.COMPOUND)
-
-console.log(b1.find(Shape.types.FACE))
-
-const f = builder.makeFace(XYZ(0.5, 0.5, 0.5), XYZ(1, 1, 1))
-step.save('build/clip.stp', bool.split([b1], [f]))
+    sphere = primitive.makeSphere([0, 0, 0], 1),
+    plane = builder.makeFace([0, 0, 0], [1, 0, 0]),
+    grid = [
+        builder.makeEdge([0, -1, -0.5], [0, 1, -0.5]),
+        builder.makeEdge([0, -1, -0.0], [0, 1, -0.0]),
+        builder.makeEdge([0, -1,  0.5], [0, 1,  0.5]),
+        builder.makeEdge([0, -0.5, -1], [0, -0.5, 1]),
+        builder.makeEdge([0, -0.0, -1], [0, -0.0, 1]),
+        builder.makeEdge([0,  0.5, -1], [0,  0.5, 1]),
+    ],
+    cs = bool.common([sphere], [plane]),
+    sp = bool.split([cs], grid)
+step.save('build/cs.stp', cs)
+step.save('build/sp.stp', sp)

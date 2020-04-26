@@ -26,10 +26,12 @@ export const brep: {
     save(file: string, shape: Shape)
     load(file: string): Shape
     builder: {
+        makeEdge(p0: XYZ, p1: XYZ): Shape
         makeFace(pos: XYZ, dir: XYZ): Shape
         makeCompound(shapes: Shape[]): Shape
     }
     primitive: {
+        makeSphere(p: XYZ, r: number): Shape
         makeBox(p0: XYZ, p1: XYZ): Shape
     }
     bool: {
