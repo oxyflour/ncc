@@ -26,8 +26,11 @@ export const brep: {
     save(file: string, shape: Shape)
     load(file: string): Shape
     builder: {
+        makeVertex(p0: XYZ): Shape
         makeEdge(p0: XYZ, p1: XYZ): Shape
         makeFace(pos: XYZ, dir: XYZ): Shape
+        makeWire(edges: Shape[]): Shape
+        makeShell(wires: Shape[]): Shape
         makeCompound(shapes: Shape[]): Shape
     }
     primitive: {

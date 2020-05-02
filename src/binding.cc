@@ -15,7 +15,10 @@ Napi::Object Init(Napi::Env env, Napi::Object exports) {
     brep.Set("primitive", primitive);
 
     auto builder = Napi::Object::New(env);
+    builder.Set("makeVertex", Napi::Function::New(env, MakeVertex));
     builder.Set("makeEdge", Napi::Function::New(env, MakeEdge));
+    builder.Set("makeWire", Napi::Function::New(env, MakeWire));
+    builder.Set("makeShell", Napi::Function::New(env, MakeShell));
     builder.Set("makeFace", Napi::Function::New(env, MakeFace));
     builder.Set("makeCompound", Napi::Function::New(env, MakeCompound));
     brep.Set("builder", builder);
