@@ -8,8 +8,8 @@ Shape::Shape(const Napi::CallbackInfo &info) : Napi::ObjectWrap<Shape>(info) {
 
 void Shape::Init(Napi::Env env, Napi::Object exports) {
     auto func = DefineClass(env, "Shape", {
-        InstanceAccessor("type", &Shape::GetType, NULL),
-        InstanceMethod("find", &Shape::find),
+        InstanceAccessor("type", &Shape::Type, NULL),
+        InstanceMethod("find", &Shape::Find),
     });
 
     constructor = Napi::Persistent(func);
@@ -30,11 +30,11 @@ void Shape::Init(Napi::Env env, Napi::Object exports) {
     exports.Set("Shape", func);
 }
 
-Napi::Value Shape::GetType(const Napi::CallbackInfo &info) {
+Napi::Value Shape::Type(const Napi::CallbackInfo &info) {
     return Napi::Number::New(info.Env(), shape.ShapeType());
 }
 
-Napi::Value Shape::find(const Napi::CallbackInfo &info) {
+Napi::Value Shape::Find(const Napi::CallbackInfo &info) {
     auto type = static_cast<TopAbs_ShapeEnum>(info[0].As<Napi::Number>().Int32Value());
     auto arr = Napi::Array::New(info.Env());
     TopExp_Explorer exp;

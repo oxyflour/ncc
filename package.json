@@ -6,6 +6,7 @@
   "typings": "index.d.ts",
   "scripts": {
     "install": "download https://prebuilt.oss-cn-shanghai.aliyuncs.com/occt-7.4.tar.gz --extract --out deps && cmake-js compile",
+    "build": "cmake-js compile",
     "test": "mocha"
   },
   "keywords": [],
