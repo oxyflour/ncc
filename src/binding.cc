@@ -21,6 +21,8 @@ Napi::Object Init(Napi::Env env, Napi::Object exports) {
     builder.Set("makeShell", Napi::Function::New(env, MakeShell));
     builder.Set("makeFace", Napi::Function::New(env, MakeFace));
     builder.Set("makeCompound", Napi::Function::New(env, MakeCompound));
+    builder.Set("makeSolid", Napi::Function::New(env, MakeSolid));
+    builder.Set("toNurbs", Napi::Function::New(env, ToNurbs));
     brep.Set("builder", builder);
 
     auto boolean = Napi::Object::New(env);
@@ -44,4 +46,4 @@ Napi::Object Init(Napi::Env env, Napi::Object exports) {
     return exports;
 }
 
-NODE_API_MODULE(testaddon, Init)
+NODE_API_MODULE(binding, Init)

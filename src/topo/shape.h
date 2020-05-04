@@ -10,6 +10,7 @@ public:
     TopoDS_Shape shape;
     Napi::Value Type(const Napi::CallbackInfo &info);
     Napi::Value Find(const Napi::CallbackInfo &info);
+    Napi::Value Test(const Napi::CallbackInfo &info);
 private:
     static Napi::FunctionReference constructor;
 };

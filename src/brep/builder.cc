@@ -5,10 +5,12 @@
 #include <BRepBuilderAPI_MakeFace.hxx>
 #include <BRepBuilderAPI_MakeWire.hxx>
 #include <BRepBuilderAPI_MakeShell.hxx>
+#include <BRepBuilderAPI_NurbsConvert.hxx>
 #include <BRep_Builder.hxx>
 
 #include <TopoDS_Edge.hxx>
 #include <TopoDS_Face.hxx>
+#include <TopoDS_Wire.hxx>
 #include <TopoDS_Compound.hxx>
 
 #include <gp_Pln.hxx>
@@ -39,7 +41,15 @@ Napi::Value MakeEdge(const Napi::CallbackInfo &info) {
 }
 
 Napi::Value MakeFace(const Napi::CallbackInfo &info) {
-    if (info.Length() == 2) {
+    if (info.Length() == 1 && info[0].IsArray()) {
+        TopoDS_Face ret;
+        BRep_Builder builder;
+        builder.MakeFace(ret);
+        return Shape::Create(fromShapes(info[0].As<Napi::Array>(), builder, ret));
+    } else if (info.Length() == 1) {
+        auto wire = Shape::Unwrap(info[0].As<Napi::Object>());
+        return Shape::Create(BRepBuilderAPI_MakeFace(TopoDS::Wire(wire->shape)));
+    } else if (info.Length() == 2) {
         auto pos = obj2pt(info[0]), dir = obj2pt(info[1]);
         auto plane = gp_Pln(pos, gp_Dir(dir.XYZ()));
         return Shape::Create(BRepBuilderAPI_MakeFace(plane).Face());
@@ -80,4 +90,21 @@ Napi::Value MakeCompound(const Napi::CallbackInfo &info) {
     } else {
         Napi::Error::New(info.Env(), "not implemented yet").ThrowAsJavaScriptException();
     }
+}
+
+Napi::Value MakeSolid(const Napi::CallbackInfo &info) {
+    if (info.Length() == 1 && info[0].IsArray()) {
+        TopoDS_Solid ret;
+        BRep_Builder builder;
+        builder.MakeSolid(ret);
+        return Shape::Create(fromShapes(info[0].As<Napi::Array>(), builder, ret));
+    } else {
+        Napi::Error::New(info.Env(), "not implemented yet").ThrowAsJavaScriptException();
+    }
+}
+
+Napi::Value ToNurbs(const Napi::CallbackInfo &info) {
+    auto shape = Shape::Unwrap(info[0].As<Napi::Object>())->shape;
+    auto nurbs = BRepBuilderAPI_NurbsConvert(shape);
+    return Shape::Create(nurbs);
 }

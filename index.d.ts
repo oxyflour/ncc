@@ -20,6 +20,7 @@ declare class Shape {
     static types: typeof ShapeType
     type: ShapeType
     find(type: ShapeType): Shape[]
+    test(): Shape
 }
 
 export const brep: {
@@ -29,9 +30,12 @@ export const brep: {
         makeVertex(p0: XYZ): Shape
         makeEdge(p0: XYZ, p1: XYZ): Shape
         makeFace(pos: XYZ, dir: XYZ): Shape
+        makeFace(wire: Shape): Shape
         makeWire(edges: Shape[]): Shape
         makeShell(wires: Shape[]): Shape
         makeCompound(shapes: Shape[]): Shape
+        makeSolid(shapes: Shape[]): Shape
+        toNurbs(shape: Shape): Shape
     }
     primitive: {
         makeSphere(p: XYZ, r: number): Shape

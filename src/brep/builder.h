@@ -6,3 +6,5 @@ Napi::Value MakeFace(const Napi::CallbackInfo &info);
 Napi::Value MakeWire(const Napi::CallbackInfo &info);
 Napi::Value MakeShell(const Napi::CallbackInfo &info);
 Napi::Value MakeCompound(const Napi::CallbackInfo &info);
+Napi::Value MakeSolid(const Napi::CallbackInfo &info);
+Napi::Value ToNurbs(const Napi::CallbackInfo &info);
