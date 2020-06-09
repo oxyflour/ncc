@@ -104,7 +104,7 @@ describe('tool', () => {
         const b1 = primitive.makeBox([0, 0, 0], [1.1, 1.1, 1.1]),
             mesh = tool.mesh([b1], [0.5, 0.5], [-0.5, 0, 1, 1.5], [-0.5, 0, 1, 1.5])
         assert.deepEqual(
-            mesh.map(({ i, j, k, p }) => ({ i, j, k, s: p.getSurfaceProps().mass })), [
+            mesh.map(({ i, j, k, s }) => ({ i, j, k, s })), [
             { i: 0, j: 1, k: 1, s: 1 },
             { i: 0, j: 1, k: 2, s: 0.10000000000000009 },
             { i: 0, j: 2, k: 1, s: 0.10000000000000009 },

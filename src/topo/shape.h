@@ -12,7 +12,9 @@ public:
     Napi::Value Bound(const Napi::CallbackInfo &info);
     Napi::Value Find(const Napi::CallbackInfo &info);
 
+    Napi::Value GetLinearProps(const Napi::CallbackInfo &info);
     Napi::Value GetSurfaceProps(const Napi::CallbackInfo &info);
+    Napi::Value GetVolumeProps(const Napi::CallbackInfo &info);
 
     Napi::Value Test(const Napi::CallbackInfo &info);
 private:

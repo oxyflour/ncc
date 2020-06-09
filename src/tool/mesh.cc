@@ -103,6 +103,11 @@ Napi::Value MakeMesh(const Napi::CallbackInfo &info) {
                                 item.Set("j", j);
                                 item.Set("k", k);
                                 item.Set("p", Shape::Create(pz));
+                                GProp_GProps props;
+                                BRepGProp::SurfaceProperties(pz, props);
+                                item.Set("s", props.Mass());
+                                BRepGProp::LinearProperties(pz, props);
+                                item.Set("l", props.Mass());
                                 ret.Set(num ++, item);
                             }
                         }

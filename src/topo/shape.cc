@@ -28,7 +28,9 @@ void Shape::Init(Napi::Env env, Napi::Object exports) {
         InstanceMethod("bound", &Shape::Bound),
         InstanceMethod("find", &Shape::Find),
 
+        InstanceMethod("getLinearProps", &Shape::GetLinearProps),
         InstanceMethod("getSurfaceProps", &Shape::GetSurfaceProps),
+        InstanceMethod("getVolumeProps", &Shape::GetVolumeProps),
 
         InstanceMethod("test", &Shape::Test),
     });
@@ -112,9 +114,25 @@ Napi::Value Shape::Find(const Napi::CallbackInfo &info) {
     return arr;
 }
 
+Napi::Value Shape::GetLinearProps(const Napi::CallbackInfo &info) {
+    GProp_GProps props;
+    BRepGProp::LinearProperties(shape, props);
+    auto ret = Napi::Object::New(info.Env());
+    ret.Set("mass", props.Mass());
+    return ret;
+}
+
 Napi::Value Shape::GetSurfaceProps(const Napi::CallbackInfo &info) {
     GProp_GProps props;
     BRepGProp::SurfaceProperties(shape, props);
+    auto ret = Napi::Object::New(info.Env());
+    ret.Set("mass", props.Mass());
+    return ret;
+}
+
+Napi::Value Shape::GetVolumeProps(const Napi::CallbackInfo &info) {
+    GProp_GProps props;
+    BRepGProp::VolumeProperties(shape, props);
     auto ret = Napi::Object::New(info.Env());
     ret.Set("mass", props.Mass());
     return ret;
