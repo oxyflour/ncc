@@ -8,6 +8,11 @@ describe('brep', () => {
         brep.save('build/box.brep', b1)
         const b2 = brep.load('build/box.brep')
         assert.equal(b2.type, b1.type)
+
+        const buf = brep.save(b1)
+        assert.ok(Buffer.isBuffer(buf))
+        const b3 = brep.load(buf)
+        assert.equal(b2.type, b3.type)
     })
 
     describe('brep.builder', () => {

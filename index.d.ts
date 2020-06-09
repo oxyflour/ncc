@@ -25,7 +25,9 @@ declare class Shape {
 
 export const brep: {
     save(file: string, shape: Shape)
+    save(shape: Shape): Buffer
     load(file: string): Shape
+    load(buffer: Buffer)
     builder: {
         makeVertex(p0: XYZ): Shape
         makeEdge(p0: XYZ, p1: XYZ): Shape
