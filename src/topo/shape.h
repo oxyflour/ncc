@@ -9,7 +9,11 @@ public:
 
     TopoDS_Shape shape;
     Napi::Value Type(const Napi::CallbackInfo &info);
+    Napi::Value Bound(const Napi::CallbackInfo &info);
     Napi::Value Find(const Napi::CallbackInfo &info);
+
+    Napi::Value GetSurfaceProps(const Napi::CallbackInfo &info);
+
     Napi::Value Test(const Napi::CallbackInfo &info);
 private:
     static Napi::FunctionReference constructor;

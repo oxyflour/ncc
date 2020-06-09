@@ -1,14 +1,19 @@
 #include "shape.h"
-#include <TopExp_Explorer.hxx>
+
+#include <Bnd_Box.hxx>
 
 #include <TopoDS_Face.hxx>
 #include <TopoDS_Edge.hxx>
 #include <TopoDS_Wire.hxx>
-#include <BRepAdaptor_Surface.hxx>
-#include <BRepAdaptor_HSurface.hxx>
+#include <TopExp_Explorer.hxx>
+
 #include <Geom_BSplineSurface.hxx>
 #include <Geom_BSplineCurve.hxx>
+
+#include <BRepAdaptor_Surface.hxx>
+#include <BRepAdaptor_HSurface.hxx>
 #include <BRepBuilderAPI_MakeFace.hxx>
+#include <BRepBndLib.hxx>
 
 #include "../utils.h"
 
@@ -18,6 +23,7 @@ Shape::Shape(const Napi::CallbackInfo &info) : Napi::ObjectWrap<Shape>(info) {
 void Shape::Init(Napi::Env env, Napi::Object exports) {
     auto func = DefineClass(env, "Shape", {
         InstanceAccessor("type", &Shape::Type, NULL),
+        InstanceMethod("bound", &Shape::Bound),
         InstanceMethod("find", &Shape::Find),
         InstanceMethod("test", &Shape::Test),
     });
@@ -67,6 +73,27 @@ Napi::Value Shape::Test(const Napi::CallbackInfo &info) {
         surface.FirstVParameter(), surface.LastVParameter(), 1e-3));
      */
     return info.This();
+}
+
+Napi::Value Shape::Bound(const Napi::CallbackInfo &info) {
+    Bnd_Box box;
+    BRepBndLib::Add(shape, box);
+
+    double xmin, ymin, zmin, xmax, ymax, zmax;
+    box.Get(xmin, ymin, zmin, xmax, ymax, zmax);
+
+    auto min = Napi::Object::New(info.Env());
+    min.Set("x", xmin);
+    min.Set("y", ymin);
+    min.Set("z", zmin);
+    auto max = Napi::Object::New(info.Env());
+    max.Set("x", xmax);
+    max.Set("y", ymax);
+    max.Set("z", zmax);
+    auto ret = Napi::Object::New(info.Env());
+    ret.Set("min", min);
+    ret.Set("max", max);
+    return ret;
 }
 
 Napi::Value Shape::Find(const Napi::CallbackInfo &info) {

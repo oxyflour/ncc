@@ -15,6 +15,14 @@ describe('brep', () => {
         assert.equal(b2.type, b3.type)
     })
 
+    describe('shape.bound', () => {
+        const b1 = primitive.makeBox([1, 2, 3], [4, 5, 6])
+        assert.deepEqual(b1.bound(), {
+            min: { x: 0.9999999, y: 1.9999999, z: 2.9999999 },
+            max: { x: 4.0000001, y: 5.0000001, z: 6.0000001 },
+        })
+    })
+
     describe('brep.builder', () => {
         it('should make edge', () => {
             const edge = builder.makeEdge([0, 0, 0], [0, 0, 1])

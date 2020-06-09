@@ -1,8 +1,13 @@
-type XYZ = {
+type Vec3 = {
     x: number
     y: number
     z: number
-} | [number, number, number]
+}
+type XYZ = Vec3 | [
+    number,
+    number,
+    number
+]
 
 declare enum ShapeType {
     COMPOUND,
@@ -20,6 +25,8 @@ declare class Shape {
     static types: typeof ShapeType
     type: ShapeType
     find(type: ShapeType): Shape[]
+    bound(): { min: Vec3, max: Vec3 }
+
     test(): Shape
 }
 
