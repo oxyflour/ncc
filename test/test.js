@@ -1,5 +1,5 @@
 const assert = require('assert'),
-    { brep, step, Shape } = require('../'),
+    { brep, step, tool, Shape } = require('../'),
     { bool, builder, primitive } = brep
 
 describe('shape', () => {
@@ -96,5 +96,19 @@ describe('step', () => {
         step.save('build/box.stp', b1)
         const b2 = step.load('build/box.stp')
         assert.equal(b2.type, b1.type)
+    })
+})
+
+describe('tool', () => {
+    it('tool.mesh', () => {
+        const b1 = primitive.makeBox([0, 0, 0], [1.1, 1.1, 1.1]),
+            mesh = tool.mesh([b1], [0.5, 0.5], [-0.5, 0, 1, 1.5], [-0.5, 0, 1, 1.5])
+        assert.deepEqual(
+            mesh.map(({ i, j, k, p }) => ({ i, j, k, s: p.getSurfaceProps().mass })), [
+            { i: 0, j: 1, k: 1, s: 1 },
+            { i: 0, j: 1, k: 2, s: 0.10000000000000009 },
+            { i: 0, j: 2, k: 1, s: 0.10000000000000009 },
+            { i: 0, j: 2, k: 2, s: 0.010000000000000018 }
+        ])
     })
 })

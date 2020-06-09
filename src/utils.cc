@@ -18,6 +18,15 @@ gp_Pnt obj2pt(Napi::Value val) {
     }
 }
 
+std::vector<double> toDoubleArr(Napi::Value arr) {
+    std::vector<double> ret;
+    auto list = arr.As<Napi::Array>();
+    for (uint32_t i = 0; i < list.Length(); i ++) {
+        ret.push_back(list.Get(i).As<Napi::Number>().DoubleValue());
+    }
+    return ret;
+}
+
 Napi::Object pt2obj(Napi::Env env, gp_Pnt &pt) {
     auto obj = Napi::Object::New(env);
     obj.Set("x", Napi::Number::New(env, pt.X()));

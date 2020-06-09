@@ -61,6 +61,14 @@ export const brep: {
     }
 }
 
+export const tool: {
+    mesh(shapes: Shape[], xs: number[], ys: number[], zs: number[]): {
+        i: number
+        j: number
+        k: number
+        p: Shape
+    }[]
+}
 
 export const step: {
     save(file: string, shape: Shape)
