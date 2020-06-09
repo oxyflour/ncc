@@ -1,6 +1,7 @@
 #include "shape.h"
 
 #include <Bnd_Box.hxx>
+#include <GProp_GProps.hxx>
 
 #include <TopoDS_Face.hxx>
 #include <TopoDS_Edge.hxx>
@@ -14,6 +15,7 @@
 #include <BRepAdaptor_HSurface.hxx>
 #include <BRepBuilderAPI_MakeFace.hxx>
 #include <BRepBndLib.hxx>
+#include <BRepGProp.hxx>
 
 #include "../utils.h"
 
@@ -25,6 +27,9 @@ void Shape::Init(Napi::Env env, Napi::Object exports) {
         InstanceAccessor("type", &Shape::Type, NULL),
         InstanceMethod("bound", &Shape::Bound),
         InstanceMethod("find", &Shape::Find),
+
+        InstanceMethod("getSurfaceProps", &Shape::GetSurfaceProps),
+
         InstanceMethod("test", &Shape::Test),
     });
 
@@ -105,6 +110,14 @@ Napi::Value Shape::Find(const Napi::CallbackInfo &info) {
         arr.Set(i, Shape::Create(exp.Current()));
     }
     return arr;
+}
+
+Napi::Value Shape::GetSurfaceProps(const Napi::CallbackInfo &info) {
+    GProp_GProps props;
+    BRepGProp::SurfaceProperties(shape, props);
+    auto ret = Napi::Object::New(info.Env());
+    ret.Set("mass", props.Mass());
+    return ret;
 }
 
 Napi::Value Shape::Create(const TopoDS_Shape &shape) {

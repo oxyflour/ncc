@@ -27,6 +27,8 @@ declare class Shape {
     find(type: ShapeType): Shape[]
     bound(): { min: Vec3, max: Vec3 }
 
+    getSurfaceProps(): { mass: number }
+
     test(): Shape
 }
 
