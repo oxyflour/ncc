@@ -27,9 +27,9 @@ declare class Shape {
     find(type: ShapeType): Shape[]
     bound(): { min: Vec3, max: Vec3 }
 
+    getLinearProps(): { mass: number }
     getSurfaceProps(): { mass: number }
-
-    test(): Shape
+    getVolumeProps(): { mass: number }
 }
 
 export const brep: {

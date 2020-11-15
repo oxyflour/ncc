@@ -15,8 +15,6 @@ public:
     Napi::Value GetLinearProps(const Napi::CallbackInfo &info);
     Napi::Value GetSurfaceProps(const Napi::CallbackInfo &info);
     Napi::Value GetVolumeProps(const Napi::CallbackInfo &info);
-
-    Napi::Value Test(const Napi::CallbackInfo &info);
 private:
     static Napi::FunctionReference constructor;
 };

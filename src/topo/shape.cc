@@ -31,8 +31,6 @@ void Shape::Init(Napi::Env env, Napi::Object exports) {
         InstanceMethod("getLinearProps", &Shape::GetLinearProps),
         InstanceMethod("getSurfaceProps", &Shape::GetSurfaceProps),
         InstanceMethod("getVolumeProps", &Shape::GetVolumeProps),
-
-        InstanceMethod("test", &Shape::Test),
     });
 
     constructor = Napi::Persistent(func);
@@ -55,31 +53,6 @@ void Shape::Init(Napi::Env env, Napi::Object exports) {
 
 Napi::Value Shape::Type(const Napi::CallbackInfo &info) {
     return Napi::Number::New(info.Env(), shape.ShapeType());
-}
-
-Napi::Value Shape::Test(const Napi::CallbackInfo &info) {
-    auto trans = gp_Trsf();
-    trans.SetTranslation(gp_Vec(0, 1, 0));
-    shape.Move(trans);
-    /*
-    auto surface = BRepAdaptor_Surface(face);
-    auto bspline = surface.BSpline();
-    auto nu = bspline->NbUPoles(), nv = bspline->NbVPoles();
-    for (int i = 1; i <= nu; i ++) {
-        auto u = (i - 1) / (nu - 1);
-        for (int j = 1; j <= nv; j ++) {
-            auto v = (j - 1) / (nv - 1);
-            auto pt = bspline->Value(u, v);
-            pt.SetX(pt.X() + 0.1);
-            int u0, v0, u1, v1;
-            bspline->MovePoint(u, v, pt, i, i, j, j, u0, v0, u1, v1);
-        }
-    }
-    return Shape::Create(BRepBuilderAPI_MakeFace(bspline,
-        surface.FirstUParameter(), surface.LastUParameter(),
-        surface.FirstVParameter(), surface.LastVParameter(), 1e-3));
-     */
-    return info.This();
 }
 
 Napi::Value Shape::Bound(const Napi::CallbackInfo &info) {
