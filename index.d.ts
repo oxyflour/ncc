@@ -66,6 +66,7 @@ export const tool: {
         i: number
         j: number
         k: number
+        s: number
         p: Shape
     }[]
 }

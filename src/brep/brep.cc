@@ -32,6 +32,8 @@ Napi::Value SaveBrep(const Napi::CallbackInfo &info) {
             auto msg = std::string("failed to write ") + file;
             Napi::Error::New(info.Env(), msg).ThrowAsJavaScriptException();
         }
+        // return value is required
+        return info.Env().Null();
     } else {
         auto &shape = Shape::Unwrap(info[0].As<Napi::Object>())->shape;
         std::ostringstream stream;

@@ -26,7 +26,7 @@ describe('brep', () => {
         assert.equal(b2.type, b1.type)
 
         const buf = brep.save(b1)
-        assert.ok(Buffer.isBuffer(buf))
+        assert.equal(Buffer.isBuffer(buf), true)
         const b3 = brep.load(buf)
         assert.equal(b2.type, b3.type)
     })
