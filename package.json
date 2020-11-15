@@ -1,11 +1,11 @@
 {
   "name": "@oxyflour/ncc",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "description": "",
   "main": "index.js",
   "typings": "index.d.ts",
   "scripts": {
-    "install": "node install.js",
+    "install": "node install.js && cmake-js compile",
     "build": "cmake-js compile",
     "test": "mocha"
   },
