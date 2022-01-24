@@ -33,10 +33,10 @@ declare class Shape {
 }
 
 export const brep: {
-    save(file: string, shape: Shape)
+    save(file: string, shape: Shape): void
     save(shape: Shape): Buffer
     load(file: string): Shape
-    load(buffer: Buffer)
+    load(buffer: Buffer): Shape
     builder: {
         makeVertex(p0: XYZ): Shape
         makeEdge(p0: XYZ, p1: XYZ): Shape
@@ -71,7 +71,14 @@ export const tool: {
     }[]
 }
 
+export const mesh: {
+    create(shape: Shape, opts?: {
+        angle?: number
+        deflection?: number
+    }): { position: Float32Array, indices: Uint32Array }
+}
+
 export const step: {
-    save(file: string, shape: Shape)
+    save(file: string, shape: Shape): void
     load(file: string): Shape
 }

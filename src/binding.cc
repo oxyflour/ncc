@@ -6,6 +6,7 @@
 #include "topo/shape.h"
 #include "step/step.h"
 #include "tool/mesh.h"
+#include "mesh/mesh.h"
 
 Napi::Object Init(Napi::Env env, Napi::Object exports) {
     auto brep = Napi::Object::New(env);
@@ -46,6 +47,10 @@ Napi::Object Init(Napi::Env env, Napi::Object exports) {
     auto tool = Napi::Object::New(env);
     tool.Set("mesh", Napi::Function::New(env, MakeMesh));
     exports.Set("tool", tool);
+
+    auto mesh = Napi::Object::New(env);
+    mesh.Set("create", Napi::Function::New(env, CreateMesh));
+    exports.Set("mesh", mesh);
 
     Shape::Init(env, exports);
     return exports;

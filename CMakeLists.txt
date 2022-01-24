@@ -4,7 +4,7 @@ set (CMAKE_CXX_STANDARD 17)
 project(binding)
 add_definitions(-DNAPI_VERSION=3)
 include_directories(${CMAKE_JS_INC})
-file(GLOB SOURCE_FILES src/*.cc src/brep/*.cc src/step/*.cc src/topo/*.cc src/tool/*.cc)
+file(GLOB SOURCE_FILES src/*.cc src/**/*.cc)
 
 # you must have this before `add_library`
 link_directories(${CMAKE_SOURCE_DIR}/deps/occt-7.4/lib)
