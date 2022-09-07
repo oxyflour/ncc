@@ -29,6 +29,7 @@ Napi::Value CreateMesh(const Napi::CallbackInfo &info) {
 
     auto pos = Napi::Float32Array::New(info.Env(), posNum * 3);
     auto idx = Napi::Uint32Array::New(info.Env(), idxNum * 3);
+    auto norm = Napi::Float32Array::New(info.Env(), posNum * 3);
     posNum = idxNum = 0;
     shape.Location(loc);
     auto isId = loc.IsIdentity();
@@ -47,6 +48,10 @@ Napi::Value CreateMesh(const Napi::CallbackInfo &info) {
             pos[s    ] = p.X();
             pos[s + 1] = p.Y();
             pos[s + 2] = p.Z();
+            auto v = mesh->Normal(i + 1);
+            norm[s    ] = v.X();
+            norm[s + 1] = v.Y();
+            norm[s + 2] = v.Z();
         }
         for (int i = 0, n = mesh->NbTriangles(); i < n; i ++, idxNum ++) {
             auto s = idxNum * 3;
@@ -63,7 +68,8 @@ Napi::Value CreateMesh(const Napi::CallbackInfo &info) {
     }
 
     auto ret = Napi::Object::New(info.Env());
-    ret.Set("position", pos);
+    ret.Set("positions", pos);
     ret.Set("indices", idx);
+    ret.Set("normals", pos);
     return ret;
 }
