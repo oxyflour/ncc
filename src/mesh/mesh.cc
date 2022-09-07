@@ -70,6 +70,6 @@ Napi::Value CreateMesh(const Napi::CallbackInfo &info) {
     auto ret = Napi::Object::New(info.Env());
     ret.Set("positions", pos);
     ret.Set("indices", idx);
-    ret.Set("normals", pos);
+    ret.Set("normals", norm);
     return ret;
 }
