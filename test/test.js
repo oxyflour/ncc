@@ -1,5 +1,5 @@
 const assert = require('assert'),
-    { brep, step, tool, Shape } = require('../'),
+    { brep, step, tool, Shape, mesh } = require('../'),
     { bool, builder, primitive } = brep
 
 describe('shape', () => {
@@ -110,5 +110,14 @@ describe('tool', () => {
             { i: 0, j: 2, k: 1, s: 0.10000000000000009 },
             { i: 0, j: 2, k: 2, s: 0.010000000000000018 }
         ])
+    })
+})
+
+describe('mesh', () => {
+    it('mesh.create', () => {
+        const b = primitive.makeBox([0, 0, 0], [1.1, 1.1, 1.1]),
+            ret = mesh.create(b)
+        console.log(ret)
+        assert.deepEqual(1, 1)
     })
 })

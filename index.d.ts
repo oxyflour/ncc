@@ -75,7 +75,7 @@ export const mesh: {
     create(shape: Shape, opts?: {
         angle?: number
         deflection?: number
-    }): { position: Float32Array, indices: Uint32Array }
+    }): { positions: Float32Array, indices: Uint32Array }
 }
 
 export const step: {

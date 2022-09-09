@@ -30,6 +30,22 @@ Napi::Value CreateMesh(const Napi::CallbackInfo &info) {
     auto pos = Napi::Float32Array::New(info.Env(), posNum * 3);
     auto idx = Napi::Uint32Array::New(info.Env(), idxNum * 3);
     auto norm = Napi::Float32Array::New(info.Env(), posNum * 3);
+    std::vector<int> normNum(posNum * 3);
+    auto getPos = [&pos](int idx) {
+        auto n = idx * 3;
+        return gp_XYZ(pos[n], pos[n + 1], pos[n + 2]);
+    };
+    auto getNorm = [](gp_XYZ &p1, gp_XYZ &p2, gp_XYZ &p3) {
+        auto n = (p2 - p1) ^ (p3 - p2);
+        auto s = n.Modulus();
+        if (s > gp::Resolution()) {
+            n.Divide(s);
+        } else {
+            n.SetCoord(0, 0, 0);
+        }
+        return n;
+    };
+
     posNum = idxNum = 0;
     shape.Location(loc);
     auto isId = loc.IsIdentity();
@@ -48,10 +64,6 @@ Napi::Value CreateMesh(const Napi::CallbackInfo &info) {
             pos[s    ] = p.X();
             pos[s + 1] = p.Y();
             pos[s + 2] = p.Z();
-            auto v = mesh->Normal(i + 1);
-            norm[s    ] = v.X();
-            norm[s + 1] = v.Y();
-            norm[s + 2] = v.Z();
         }
         for (int i = 0, n = mesh->NbTriangles(); i < n; i ++, idxNum ++) {
             auto s = idxNum * 3;
@@ -64,6 +76,21 @@ Napi::Value CreateMesh(const Napi::CallbackInfo &info) {
             idx[s    ] = a - 1 + start;
             idx[s + 1] = b - 1 + start;
             idx[s + 2] = c - 1 + start;
+            auto nr = getNorm(
+                getPos(idx[s]),
+                getPos(idx[s + 1]),
+                getPos(idx[s + 2]));
+            for (int d = s; d < s + 3; d ++) {
+                int q = idx[d] * 3,
+                    c = normNum[d];
+                normNum[d] ++;
+                norm[q] = (norm[q] * c + nr.X()) / (c + 1);
+                q ++;
+                norm[q] = (norm[q] * c + nr.Y()) / (c + 1);
+                q ++;
+                norm[q] = (norm[q] * c + nr.Z()) / (c + 1);
+                q ++;
+            }
         }
     }
 
