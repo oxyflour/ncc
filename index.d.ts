@@ -71,11 +71,24 @@ export const tool: {
     }[]
 }
 
+type Face = {
+    positions: Float32Array
+    indices: Uint32Array
+    normals: Float32Array 
+}
+
 export const mesh: {
     create(shape: Shape, opts?: {
         angle?: number
         deflection?: number
-    }): { positions: Float32Array, indices: Uint32Array }
+    }): Face
+    topo(shape: Shape, opts?: {
+        angle?: number
+        deflection?: number
+    }): {
+        faces: Face[]
+        edges: { }[]
+    }
 }
 
 export const step: {

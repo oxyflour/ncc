@@ -50,6 +50,7 @@ Napi::Object Init(Napi::Env env, Napi::Object exports) {
 
     auto mesh = Napi::Object::New(env);
     mesh.Set("create", Napi::Function::New(env, CreateMesh));
+    mesh.Set("topo", Napi::Function::New(env, CreateTopo));
     exports.Set("mesh", mesh);
 
     Shape::Init(env, exports);

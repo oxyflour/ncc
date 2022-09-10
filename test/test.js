@@ -116,8 +116,9 @@ describe('tool', () => {
 describe('mesh', () => {
     it('mesh.create', () => {
         const b = primitive.makeBox([0, 0, 0], [1.1, 1.1, 1.1]),
-            ret = mesh.create(b)
-        console.log(ret)
-        assert.deepEqual(1, 1)
+            ret = mesh.topo(b)
+        // FIXME: should it be 12?
+        assert.equal(ret.edges.length, 24)
+        assert.equal(ret.faces.length, 6)
     })
 })
