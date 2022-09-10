@@ -90,6 +90,7 @@ export const mesh: {
         deflection?: number
     }): {
         geom: Face
+        verts: Float32Array
         faces: Face[]
         edges: Edge[]
     }

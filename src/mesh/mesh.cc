@@ -5,6 +5,7 @@
 #include <BRep_Tool.hxx>
 #include <TopoDS_Face.hxx>
 #include <TopoDS_Edge.hxx>
+#include <TopoDS_Vertex.hxx>
 
 #include "../topo/shape.h"
 
@@ -34,8 +35,6 @@ Napi::Value CreateTopo(const Napi::CallbackInfo &info) {
     }
 
     BRepMesh_IncrementalMesh mesher(shape, params);
-    auto faces = Napi::Array::New(info.Env());
-    auto edges = Napi::Array::New(info.Env());
 
     TopLoc_Location loc;
     shape.Location(loc);
@@ -44,6 +43,7 @@ Napi::Value CreateTopo(const Napi::CallbackInfo &info) {
     int faceIndex = 0;
     std::vector<float> positions, normals;
     std::vector<int> indices;
+    auto faces = Napi::Array::New(info.Env());
     for (TopExp_Explorer ex(shape, TopAbs_ShapeEnum::TopAbs_FACE); ex.More(); ex.Next()) {
         auto face = TopoDS::Face(ex.Current());
         auto mesh = BRep_Tool::Triangulation(face, loc);
@@ -117,6 +117,7 @@ Napi::Value CreateTopo(const Napi::CallbackInfo &info) {
     geom.Set("normals", norm);
 
     auto edgeIndex = 0;
+    auto edges = Napi::Array::New(info.Env());
     for (TopExp_Explorer ex(shape, TopAbs_ShapeEnum::TopAbs_EDGE); ex.More(); ex.Next()) {
         auto edge = TopoDS::Edge(ex.Current());
         BRepMesh_IncrementalMesh mesher(edge, params);
@@ -136,9 +137,24 @@ Napi::Value CreateTopo(const Napi::CallbackInfo &info) {
         }
     }
 
+    auto vertIndex = 0;
+    auto verts = Napi::Array::New(info.Env());
+    for (TopExp_Explorer ex(shape, TopAbs_ShapeEnum::TopAbs_VERTEX); ex.More(); ex.Next()) {
+        auto vert = TopoDS::Vertex(ex.Current());
+        auto pt = BRep_Tool::Pnt(vert);
+        auto pos = Napi::Array::New(info.Env());
+        pos.Set((uint32_t) 0, pt.X());
+        pos.Set(1, pt.Y());
+        pos.Set(2, pt.Z());
+        auto ret = Napi::Object::New(info.Env());
+        ret.Set("positions", pos);
+        verts.Set(vertIndex ++, ret);
+    }
+
     auto ret = Napi::Object::New(info.Env());
     ret.Set("faces", faces);
     ret.Set("edges", edges);
+    ret.Set("verts", verts);
     ret.Set("geom", geom);
     return ret;
 }
