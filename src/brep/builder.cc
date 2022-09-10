@@ -81,6 +81,7 @@ Napi::Value MakeShell(const Napi::CallbackInfo &info) {
         return Shape::Create(fromShapes(info[0].As<Napi::Array>(), builder, ret));
     } else {
         Napi::Error::New(info.Env(), "not implemented yet").ThrowAsJavaScriptException();
+        return info.Env().Undefined();
     }
 }
 
@@ -92,6 +93,7 @@ Napi::Value MakeCompound(const Napi::CallbackInfo &info) {
         return Shape::Create(fromShapes(info[0].As<Napi::Array>(), builder, ret));
     } else {
         Napi::Error::New(info.Env(), "not implemented yet").ThrowAsJavaScriptException();
+        return info.Env().Undefined();
     }
 }
 

@@ -71,10 +71,13 @@ export const tool: {
     }[]
 }
 
-type Face = {
+export type Face = {
     positions: Float32Array
     indices: Uint32Array
     normals: Float32Array 
+}
+export type Edge = {
+    positions: Float32Array
 }
 
 export const mesh: {
@@ -86,8 +89,9 @@ export const mesh: {
         angle?: number
         deflection?: number
     }): {
+        geom: Face
         faces: Face[]
-        edges: { }[]
+        edges: Edge[]
     }
 }
 

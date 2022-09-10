@@ -120,5 +120,8 @@ describe('mesh', () => {
         // FIXME: should it be 12?
         assert.equal(ret.edges.length, 24)
         assert.equal(ret.faces.length, 6)
+        assert.equal(ret.geom.positions.length, 72)
+        assert.equal(ret.geom.indices.length, 36)
+        assert.equal(ret.geom.normals.length, 72)
     })
 })

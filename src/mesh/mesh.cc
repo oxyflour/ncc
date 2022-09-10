@@ -32,6 +32,7 @@ Napi::Value CreateTopo(const Napi::CallbackInfo &info) {
         params.Angle = opts.Has("angle") ? opts.Get("angle").As<Napi::Number>().DoubleValue() : 0.5;
         params.Deflection = opts.Has("deflection") ? opts.Get("deflection").As<Napi::Number>().DoubleValue() : 0.1;
     }
+
     BRepMesh_IncrementalMesh mesher(shape, params);
     auto faces = Napi::Array::New(info.Env());
     auto edges = Napi::Array::New(info.Env());
@@ -40,28 +41,29 @@ Napi::Value CreateTopo(const Napi::CallbackInfo &info) {
     shape.Location(loc);
     auto isId = loc.IsIdentity();
     auto trans = loc.Transformation();
-    int index = 0;
+    int faceIndex = 0;
+    std::vector<float> positions, normals;
+    std::vector<int> indices;
     for (TopExp_Explorer ex(shape, TopAbs_ShapeEnum::TopAbs_FACE); ex.More(); ex.Next()) {
         auto face = TopoDS::Face(ex.Current());
         auto mesh = BRep_Tool::Triangulation(face, loc);
-        auto posNum = mesh->NbNodes();
-        auto idxNum = mesh->NbTriangles();
 
-        auto pos = Napi::Float32Array::New(info.Env(), posNum * 3);
-        auto idx = Napi::Uint32Array::New(info.Env(), idxNum * 3);
-        auto norm = Napi::Float32Array::New(info.Env(), posNum * 3);
-        auto normNum = std::vector<int>(posNum * 3);
+        auto pos = Napi::Float32Array::New(info.Env(), mesh->NbNodes() * 3);
+        auto idx = Napi::Uint32Array::New(info.Env(), mesh->NbTriangles() * 3);
+        auto norm = Napi::Float32Array::New(info.Env(), mesh->NbNodes() * 3);
+        auto normNum = std::vector<int>(mesh->NbNodes() * 3);
 
         auto orient = face.Orientation();
+        auto start = positions.size() / 3;
         for (int i = 0, n = mesh->NbNodes(); i < n; i ++) {
             auto s = i * 3;
             auto p = mesh->Node(i + 1);
             if (!isId) {
                 p.Transform(trans);
             }
-            pos[s    ] = p.X();
-            pos[s + 1] = p.Y();
-            pos[s + 2] = p.Z();
+            positions.push_back(pos[s    ] = p.X());
+            positions.push_back(pos[s + 1] = p.Y());
+            positions.push_back(pos[s + 2] = p.Z());
         }
         for (int i = 0, n = mesh->NbTriangles(); i < n; i ++) {
             auto s = i * 3;
@@ -71,9 +73,9 @@ Napi::Value CreateTopo(const Napi::CallbackInfo &info) {
             if (orient != TopAbs_FORWARD) {
                 std::swap(a, b);
             }
-            idx[s    ] = a - 1;
-            idx[s + 1] = b - 1;
-            idx[s + 2] = c - 1;
+            indices.push_back((idx[s    ] = a - 1) + start);
+            indices.push_back((idx[s + 1] = b - 1) + start);
+            indices.push_back((idx[s + 2] = c - 1) + start);
             auto nr = getNorm(
                 getPos(pos, idx[s]),
                 getPos(pos, idx[s + 1]),
@@ -90,14 +92,31 @@ Napi::Value CreateTopo(const Napi::CallbackInfo &info) {
                 q ++;
             }
         }
+        for (int i = 0, n = mesh->NbNodes(); i < n; i ++) {
+            auto s = i * 3;
+            normals.push_back(norm[s    ]);
+            normals.push_back(norm[s + 1]);
+            normals.push_back(norm[s + 2]);
+        }
         auto ret = Napi::Object::New(info.Env());
         ret.Set("positions", pos);
         ret.Set("indices", idx);
         ret.Set("normals", norm);
-        faces.Set(index ++, ret);
+        faces.Set(faceIndex ++, ret);
     }
 
-    index = 0;
+    auto geom = Napi::Object::New(info.Env());
+    auto pos = Napi::Float32Array::New(info.Env(), positions.size());
+    for (int i = 0, n = positions.size(); i < n; i ++) pos[i] = positions[i];
+    geom.Set("positions", pos);
+    auto idx = Napi::Uint32Array::New(info.Env(), indices.size());
+    for (int i = 0, n = indices.size(); i < n; i ++) idx[i] = indices[i];
+    geom.Set("indices", idx);
+    auto norm = Napi::Float32Array::New(info.Env(), normals.size());
+    for (int i = 0, n = normals.size(); i < n; i ++) norm[i] = normals[i];
+    geom.Set("normals", norm);
+
+    auto edgeIndex = 0;
     for (TopExp_Explorer ex(shape, TopAbs_ShapeEnum::TopAbs_EDGE); ex.More(); ex.Next()) {
         auto edge = TopoDS::Edge(ex.Current());
         BRepMesh_IncrementalMesh mesher(edge, params);
@@ -113,13 +132,14 @@ Napi::Value CreateTopo(const Napi::CallbackInfo &info) {
             }
             auto ret = Napi::Object::New(info.Env());
             ret.Set("positions", pos);
-            edges.Set(index ++, ret);
+            edges.Set(edgeIndex ++, ret);
         }
     }
 
     auto ret = Napi::Object::New(info.Env());
     ret.Set("faces", faces);
     ret.Set("edges", edges);
+    ret.Set("geom", geom);
     return ret;
 }
 
