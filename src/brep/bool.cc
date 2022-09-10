@@ -9,7 +9,7 @@
 #include "../topo/shape.h"
 
 TopoDS_ListOfShape &arr2list(Napi::Array arr, TopoDS_ListOfShape &list) {
-    for (int i = 0; i < arr.Length(); i ++) {
+    for (int i = 0, n = arr.Length(); i < n; i ++) {
         auto item = arr.Get(i).As<Napi::Object>();
         list.Append(Napi::ObjectWrap<Shape>::Unwrap(item)->shape);
     }
@@ -34,6 +34,7 @@ Napi::Value fuse(const Napi::CallbackInfo &info) {
     api.Build();
     if (api.HasErrors()) {
         Napi::Error::New(info.Env(), "Fuse Failed").ThrowAsJavaScriptException();
+        return info.Env().Undefined();
     } else {
         return Shape::Create(api.Shape());
     }
@@ -48,6 +49,7 @@ Napi::Value common(const Napi::CallbackInfo &info) {
     api.Build();
     if (api.HasErrors()) {
         Napi::Error::New(info.Env(), "Common Failed").ThrowAsJavaScriptException();
+        return info.Env().Undefined();
     } else {
         return Shape::Create(api.Shape());
     }
@@ -62,6 +64,7 @@ Napi::Value cut(const Napi::CallbackInfo &info) {
     api.Build();
     if (api.HasErrors()) {
         Napi::Error::New(info.Env(), "Cut Failed").ThrowAsJavaScriptException();
+        return info.Env().Undefined();
     } else {
         return Shape::Create(api.Shape());
     }
@@ -76,6 +79,7 @@ Napi::Value section(const Napi::CallbackInfo &info) {
     api.Build();
     if (api.HasErrors()) {
         Napi::Error::New(info.Env(), "Section Failed").ThrowAsJavaScriptException();
+        return info.Env().Undefined();
     } else {
         return Shape::Create(api.Shape());
     }
@@ -90,6 +94,7 @@ Napi::Value split(const Napi::CallbackInfo &info) {
     api.Build();
     if (api.HasErrors()) {
         Napi::Error::New(info.Env(), "Split Failed").ThrowAsJavaScriptException();
+        return info.Env().Undefined();
     } else {
         return Shape::Create(api.Shape());
     }

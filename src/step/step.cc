@@ -12,6 +12,7 @@ Napi::Value LoadStep(const Napi::CallbackInfo &info) {
     if (stat != IFSelect_RetDone) {
         auto msg = std::string("read from ") + file + "failed";
         Napi::Error::New(info.Env(), msg).ThrowAsJavaScriptException();
+        return info.Env().Undefined();
     } else {
         reader.TransferRoot();
         return Shape::Create(reader.Shape());
@@ -29,4 +30,5 @@ Napi::Value SaveStep(const Napi::CallbackInfo &info) {
     } else {
         writer.Write(file.c_str());
     }
+    return info.Env().Undefined();
 }

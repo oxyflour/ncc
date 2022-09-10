@@ -21,6 +21,7 @@ Napi::Value LoadBrep(const Napi::CallbackInfo &info) {
         return Shape::Create(shape);
     } else {
         Napi::Error::New(info.Env(), "Only file name or buffer supported").ThrowAsJavaScriptException();
+        return info.Env().Undefined();
     }
 }
 

@@ -20,7 +20,7 @@
 #include "../topo/shape.h"
 
 auto fromShapes(const Napi::Array &arr, BRep_Builder &builder, TopoDS_Shape &ret) {
-    for (int i = 0; i < arr.Length(); i ++) {
+    for (int i = 0, n = arr.Length(); i < n; i ++) {
         builder.Add(ret, Shape::Unwrap(arr.Get(i).As<Napi::Object>())->shape);
     }
     return ret;
@@ -37,6 +37,7 @@ Napi::Value MakeEdge(const Napi::CallbackInfo &info) {
         return Shape::Create(BRepBuilderAPI_MakeEdge(p0, p1).Edge());
     } else {
         Napi::Error::New(info.Env(), "not implemented yet").ThrowAsJavaScriptException();
+        return info.Env().Undefined();
     }
 }
 
@@ -56,6 +57,7 @@ Napi::Value MakeFace(const Napi::CallbackInfo &info) {
     // TODO
     } else {
         Napi::Error::New(info.Env(), "not implemented yet").ThrowAsJavaScriptException();
+        return info.Env().Undefined();
     }
 }
 
@@ -67,6 +69,7 @@ Napi::Value MakeWire(const Napi::CallbackInfo &info) {
         return Shape::Create(fromShapes(info[0].As<Napi::Array>(), builder, ret));
     } else {
         Napi::Error::New(info.Env(), "not implemented yet").ThrowAsJavaScriptException();
+        return info.Env().Undefined();
     }
 }
 
@@ -100,6 +103,7 @@ Napi::Value MakeSolid(const Napi::CallbackInfo &info) {
         return Shape::Create(fromShapes(info[0].As<Napi::Array>(), builder, ret));
     } else {
         Napi::Error::New(info.Env(), "not implemented yet").ThrowAsJavaScriptException();
+        return info.Env().Undefined();
     }
 }
 

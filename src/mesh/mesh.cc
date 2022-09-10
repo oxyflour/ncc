@@ -82,8 +82,8 @@ Napi::Value CreateMesh(const Napi::CallbackInfo &info) {
                 getPos(idx[s + 2]));
             for (int d = s; d < s + 3; d ++) {
                 int q = idx[d] * 3,
-                    c = normNum[d];
-                normNum[d] ++;
+                    c = normNum[q];
+                normNum[q] ++;
                 norm[q] = (norm[q] * c + nr.X()) / (c + 1);
                 q ++;
                 norm[q] = (norm[q] * c + nr.Y()) / (c + 1);
