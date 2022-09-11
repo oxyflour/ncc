@@ -19,12 +19,15 @@
 
 #include "../utils.h"
 
+std::map<int, std::map<std::string, std::string>> Shape::MetaMap;
+
 Shape::Shape(const Napi::CallbackInfo &info) : Napi::ObjectWrap<Shape>(info) {
 }
 
 void Shape::Init(Napi::Env env, Napi::Object exports) {
     auto func = DefineClass(env, "Shape", {
         InstanceAccessor("type", &Shape::Type, NULL),
+        InstanceAccessor("meta", &Shape::Meta, NULL),
         InstanceMethod("bound", &Shape::Bound),
         InstanceMethod("find", &Shape::Find),
 
@@ -48,11 +51,21 @@ void Shape::Init(Napi::Env env, Napi::Object exports) {
     types.Set("WIRE", Napi::Number::New(env, TopAbs_ShapeEnum::TopAbs_WIRE));
     func.Set("types", types);
 
+    exports.Set("ShapeType", types);
     exports.Set("Shape", func);
 }
 
 Napi::Value Shape::Type(const Napi::CallbackInfo &info) {
     return Napi::Number::New(info.Env(), shape.ShapeType());
+}
+
+Napi::Value Shape::Meta(const Napi::CallbackInfo &info) {
+    auto &meta = Shape::MetaMap[shape.HashCode(0xffffffff)];
+    auto ret = Napi::Object::New(info.Env());
+    for (auto &[key, val] : meta) {
+        ret.Set(key, val);
+    }
+    return ret;
 }
 
 Napi::Value Shape::Bound(const Napi::CallbackInfo &info) {

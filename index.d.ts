@@ -24,6 +24,7 @@ declare enum ShapeType {
 declare class Shape {
     static types: typeof ShapeType
     type: ShapeType
+    meta: Record<string, string>
     find(type: ShapeType): Shape[]
     bound(): { min: Vec3, max: Vec3 }
 

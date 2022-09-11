@@ -3,18 +3,40 @@
 #include <STEPControl_Reader.hxx>
 #include <STEPControl_Writer.hxx>
 
+#include <XSControl_WorkSession.hxx>
+#include <XSControl_TransferReader.hxx>
+
+#include <TopExp_Explorer.hxx>
+#include <TopAbs_ShapeEnum.hxx>
+#include <Standard_CString.hxx>
+#include <StepShape_ManifoldSolidBrep.hxx>
+
 #include "../topo/shape.h"
+
+auto GetSolidNames(STEPControl_Reader &reader) {
+    TopExp_Explorer exp;
+    auto trans = reader.WS()->TransferReader();
+    for (exp.Init(reader.Shape(), TopAbs_ShapeEnum::TopAbs_SOLID); exp.More(); exp.Next()) {
+        auto ent = trans->EntityFromShapeResult(exp.Current(), 1);
+        if (!ent.IsNull()) {
+            auto prop = Handle(StepShape_ManifoldSolidBrep)::DownCast(ent);
+            auto &meta = Shape::MetaMap[exp.Current().HashCode(0xffffffff)];
+            meta["ManifoldSolidBrep"] = prop->Name()->ToCString();
+        }
+    }
+}
 
 Napi::Value LoadStep(const Napi::CallbackInfo &info) {
     std::string file = info[0].As<Napi::String>();
     STEPControl_Reader reader;
     auto stat = reader.ReadFile(file.c_str());
     if (stat != IFSelect_RetDone) {
-        auto msg = std::string("read from ") + file + "failed";
+        auto msg = std::string("read from ") + file + " failed";
         Napi::Error::New(info.Env(), msg).ThrowAsJavaScriptException();
         return info.Env().Undefined();
     } else {
         reader.TransferRoot();
+        GetSolidNames(reader);
         return Shape::Create(reader.Shape());
     }
 }
@@ -25,7 +47,7 @@ Napi::Value SaveStep(const Napi::CallbackInfo &info) {
     auto shape = Shape::Unwrap(info[1].As<Napi::Object>())->shape;
     auto stat = writer.Transfer(shape, STEPControl_StepModelType::STEPControl_AsIs);
     if (stat != IFSelect_RetDone) {
-        auto msg = std::string("write to ") + file + "failed";
+        auto msg = std::string("write to ") + file + " failed";
         Napi::Error::New(info.Env(), msg).ThrowAsJavaScriptException();
     } else {
         writer.Write(file.c_str());
