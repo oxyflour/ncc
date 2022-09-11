@@ -17,10 +17,11 @@ auto GetSolidNames(STEPControl_Reader &reader) {
     TopExp_Explorer exp;
     auto trans = reader.WS()->TransferReader();
     for (exp.Init(reader.Shape(), TopAbs_ShapeEnum::TopAbs_SOLID); exp.More(); exp.Next()) {
-        auto ent = trans->EntityFromShapeResult(exp.Current(), 1);
+        auto &shape = exp.Current();
+        auto ent = trans->EntityFromShapeResult(shape, 1);
         if (!ent.IsNull()) {
             auto prop = Handle(StepShape_ManifoldSolidBrep)::DownCast(ent);
-            auto &meta = Shape::MetaMap[exp.Current().HashCode(0xffffffff)];
+            auto &meta = Shape::MetaMap[shape.HashCode(0x0fffffff)];
             meta["ManifoldSolidBrep"] = prop->Name()->ToCString();
         }
     }

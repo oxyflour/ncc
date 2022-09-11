@@ -45,14 +45,14 @@ Napi::Value MakeMesh(const Napi::CallbackInfo &info) {
 
     std::vector<TopoDS_Shape> shapes;
     auto list = info[0].As<Napi::Array>();
-    for (uint32_t i = 0; i < list.Length(); i ++) {
+    for (int i = 0, n = list.Length(); i < n; i ++) {
         auto shape = Shape::Unwrap(list.Get(i).As<Napi::Object>())->shape;
         BRepAlgoAPI_Common api;
         shapes.push_back(makeArgsAndTools(api, shape, face));
     }
 
     auto merged = shapes[0];
-    for (uint32_t i = 1; i < shapes.size(); i ++) {
+    for (int i = 1, n = shapes.size(); i < n; i ++) {
         BRepAlgoAPI_Fuse api;
         merged = makeArgsAndTools(api, shapes[i], merged);
     }
@@ -64,7 +64,7 @@ Napi::Value MakeMesh(const Napi::CallbackInfo &info) {
 
     auto ret = Napi::Array::New(info.Env());
     int num = 0;
-    for (uint32_t i = 0, nx = xs.size(); i < nx - 1; i ++) {
+    for (int i = 0, nx = xs.size(); i < nx - 1; i ++) {
         auto xa = xs[i], xb = xs[i + 1];
         if (xmin <= xb && xa <= xmax) {
             auto px = merged;
@@ -75,7 +75,7 @@ Napi::Value MakeMesh(const Napi::CallbackInfo &info) {
                     gp_Pnt(xb, max.y + 1, max.z + 1)).Shape();
                 px = makeArgsAndTools(api, merged, box);
             }
-            for (uint32_t j = 0, ny = ys.size(), nb = px.NbChildren(); nb && j < ny - 1; j ++) {
+            for (int j = 0, ny = ys.size(), nb = px.NbChildren(); nb && j < ny - 1; j ++) {
                 auto ya = ys[j], yb = ys[j + 1];
                 if (ymin <= yb && ya <= ymax) {
                     auto py = px;
@@ -86,7 +86,7 @@ Napi::Value MakeMesh(const Napi::CallbackInfo &info) {
                             gp_Pnt(max.x + 1, yb, max.z + 1)).Shape();
                         py = makeArgsAndTools(api, px, box);
                     }
-                    for (uint32_t k = 0, nz = zs.size(), nb = py.NbChildren(); nb && k < nz - 1; k ++) {
+                    for (int k = 0, nz = zs.size(), nb = py.NbChildren(); nb && k < nz - 1; k ++) {
                         auto za = zs[k], zb = zs[k + 1];
                         if (zmin <= zb && za <= zmax) {
                             auto pz = py;

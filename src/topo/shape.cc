@@ -60,7 +60,7 @@ Napi::Value Shape::Type(const Napi::CallbackInfo &info) {
 }
 
 Napi::Value Shape::Meta(const Napi::CallbackInfo &info) {
-    auto &meta = Shape::MetaMap[shape.HashCode(0xffffffff)];
+    auto &meta = Shape::MetaMap[shape.HashCode(0x0fffffff)];
     auto ret = Napi::Object::New(info.Env());
     for (auto &[key, val] : meta) {
         ret.Set(key, val);
