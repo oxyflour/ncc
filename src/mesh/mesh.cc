@@ -14,7 +14,7 @@ auto getPos(T pos, int idx) {
     auto n = idx * 3;
     return gp_XYZ(pos[n], pos[n + 1], pos[n + 2]);
 }
-auto getNorm(gp_XYZ &p1, gp_XYZ &p2, gp_XYZ &p3) {
+auto getNorm(gp_XYZ p1, gp_XYZ p2, gp_XYZ p3) {
     auto n = (p2 - p1) ^ (p3 - p2);
     auto s = n.Modulus();
     if (s > gp::Resolution()) {
