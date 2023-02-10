@@ -54,13 +54,14 @@ describe('brep', () => {
             const sphere = primitive.makeSphere([0, 0, 0], 1)
             assert.equal(sphere.find(Shape.types.FACE).length, 1)
             assert.equal(sphere.find(Shape.types.WIRE).length, 1)
-            assert.equal(sphere.find(Shape.types.EDGE).length, 4)
+            assert.equal(sphere.find(Shape.types.EDGE).length, 3)
         })
         it('should make boxes', () => {
             const box = primitive.makeBox([0, 0, 0], [1, 1, 1])
             assert.equal(box.find(Shape.types.FACE).length, 6)
             assert.equal(box.find(Shape.types.WIRE).length, 6)
-            assert.equal(box.find(Shape.types.EDGE).length, 24)
+            assert.equal(box.find(Shape.types.EDGE).length, 12)
+            assert.equal(box.find(Shape.types.VERTEX).length, 8)
         })
     })
 
@@ -85,7 +86,7 @@ describe('brep', () => {
         })
         it('should work with split', () => {
             const ret = bool.split([b1], [b2])
-            assert.equal(ret.find(Shape.types.FACE).length, 15)
+            assert.equal(ret.find(Shape.types.FACE).length, 12)
         })
     })
 })

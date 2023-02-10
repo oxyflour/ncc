@@ -1,4 +1,5 @@
 #include "shape.h"
+#include <set>
 
 #include <Bnd_Box.hxx>
 #include <GProp_GProps.hxx>
@@ -91,11 +92,17 @@ Napi::Value Shape::Bound(const Napi::CallbackInfo &info) {
 
 Napi::Value Shape::Find(const Napi::CallbackInfo &info) {
     auto type = static_cast<TopAbs_ShapeEnum>(info[0].As<Napi::Number>().Int32Value());
-    auto arr = Napi::Array::New(info.Env());
     TopExp_Explorer exp;
+    auto arr = Napi::Array::New(info.Env());
+    std::set<int> added;
     int i = 0;
-    for (exp.Init(shape, type); exp.More(); exp.Next(), i ++) {
-        arr.Set(i, Shape::Create(exp.Current()));
+    for (exp.Init(shape, type); exp.More(); exp.Next()) {
+        auto topo = exp.Current();
+        auto hash = topo.HashCode(0x0fffffff);
+        if (!added.count(hash)) {
+            added.insert(hash);
+            arr.Set(i ++, Shape::Create(topo));
+        }
     }
     return arr;
 }
