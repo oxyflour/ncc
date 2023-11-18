@@ -47,6 +47,10 @@ Napi::Value CreateTopo(const Napi::CallbackInfo &info) {
     for (TopExp_Explorer ex(shape, TopAbs_ShapeEnum::TopAbs_FACE); ex.More(); ex.Next()) {
         auto face = TopoDS::Face(ex.Current());
         auto mesh = BRep_Tool::Triangulation(face, loc);
+        if (!mesh) {
+            // Fxxk we have to skip
+            continue;
+        }
 
         auto pos = Napi::Float32Array::New(info.Env(), mesh->NbNodes() * 3);
         auto idx = Napi::Uint32Array::New(info.Env(), mesh->NbTriangles() * 3);
@@ -61,9 +65,9 @@ Napi::Value CreateTopo(const Napi::CallbackInfo &info) {
             if (!isId) {
                 p.Transform(trans);
             }
-            positions.push_back(pos[s    ] = p.X());
-            positions.push_back(pos[s + 1] = p.Y());
-            positions.push_back(pos[s + 2] = p.Z());
+            positions.push_back(pos[s    ] = (float) p.X());
+            positions.push_back(pos[s + 1] = (float) p.Y());
+            positions.push_back(pos[s + 2] = (float) p.Z());
         }
         for (int i = 0, n = mesh->NbTriangles(); i < n; i ++) {
             auto s = i * 3;
@@ -73,9 +77,9 @@ Napi::Value CreateTopo(const Napi::CallbackInfo &info) {
             if (orient != TopAbs_FORWARD) {
                 std::swap(a, b);
             }
-            indices.push_back((idx[s    ] = a - 1) + start);
-            indices.push_back((idx[s + 1] = b - 1) + start);
-            indices.push_back((idx[s + 2] = c - 1) + start);
+            indices.push_back((idx[s    ] = a - 1) + (int) start);
+            indices.push_back((idx[s + 1] = b - 1) + (int) start);
+            indices.push_back((idx[s + 2] = c - 1) + (int) start);
             auto nr = getNorm(
                 getPos(pos, idx[s]),
                 getPos(pos, idx[s + 1]),
@@ -84,11 +88,11 @@ Napi::Value CreateTopo(const Napi::CallbackInfo &info) {
                 int q = idx[d] * 3,
                     c = normNum[q];
                 normNum[q] ++;
-                norm[q] = (norm[q] * c + nr.X()) / (c + 1);
+                norm[q] = (norm[q] * c + (float) nr.X()) / (c + 1);
                 q ++;
-                norm[q] = (norm[q] * c + nr.Y()) / (c + 1);
+                norm[q] = (norm[q] * c + (float) nr.Y()) / (c + 1);
                 q ++;
-                norm[q] = (norm[q] * c + nr.Z()) / (c + 1);
+                norm[q] = (norm[q] * c + (float) nr.Z()) / (c + 1);
                 q ++;
             }
         }
@@ -107,13 +111,13 @@ Napi::Value CreateTopo(const Napi::CallbackInfo &info) {
 
     auto geom = Napi::Object::New(info.Env());
     auto pos = Napi::Float32Array::New(info.Env(), positions.size());
-    for (int i = 0, n = positions.size(); i < n; i ++) pos[i] = positions[i];
+    for (int i = 0, n = (int) positions.size(); i < n; i ++) pos[i] = positions[i];
     geom.Set("positions", pos);
     auto idx = Napi::Uint32Array::New(info.Env(), indices.size());
-    for (int i = 0, n = indices.size(); i < n; i ++) idx[i] = indices[i];
+    for (int i = 0, n = (int) indices.size(); i < n; i ++) idx[i] = indices[i];
     geom.Set("indices", idx);
     auto norm = Napi::Float32Array::New(info.Env(), normals.size());
-    for (int i = 0, n = normals.size(); i < n; i ++) norm[i] = normals[i];
+    for (int i = 0, n = (int) normals.size(); i < n; i ++) norm[i] = normals[i];
     geom.Set("normals", norm);
 
     auto edgeIndex = 0;
@@ -127,9 +131,9 @@ Napi::Value CreateTopo(const Napi::CallbackInfo &info) {
             auto pos = Napi::Float32Array::New(info.Env(), arr.Size() * 3);
             for (auto i = arr.Lower(); i <= arr.Upper(); i ++) {
                 auto p = arr.Value(i).Transformed(loc);
-                pos[(i - 1) * 3    ] = p.X();
-                pos[(i - 1) * 3 + 1] = p.Y();
-                pos[(i - 1) * 3 + 2] = p.Z();
+                pos[(i - 1) * 3    ] = (float) p.X();
+                pos[(i - 1) * 3 + 1] = (float) p.Y();
+                pos[(i - 1) * 3 + 2] = (float) p.Z();
             }
             auto ret = Napi::Object::New(info.Env());
             ret.Set("positions", pos);
@@ -199,9 +203,9 @@ Napi::Value CreateMesh(const Napi::CallbackInfo &info) {
             if (!isId) {
                 p.Transform(trans);
             }
-            pos[s    ] = p.X();
-            pos[s + 1] = p.Y();
-            pos[s + 2] = p.Z();
+            pos[s    ] = (float) p.X();
+            pos[s + 1] = (float) p.Y();
+            pos[s + 2] = (float) p.Z();
         }
         for (int i = 0, n = mesh->NbTriangles(); i < n; i ++, idxNum ++) {
             auto s = idxNum * 3;
@@ -222,11 +226,11 @@ Napi::Value CreateMesh(const Napi::CallbackInfo &info) {
                 int q = idx[d] * 3,
                     c = normNum[q];
                 normNum[q] ++;
-                norm[q] = (norm[q] * c + nr.X()) / (c + 1);
+                norm[q] = (norm[q] * c + (float) nr.X()) / (c + 1);
                 q ++;
-                norm[q] = (norm[q] * c + nr.Y()) / (c + 1);
+                norm[q] = (norm[q] * c + (float) nr.Y()) / (c + 1);
                 q ++;
-                norm[q] = (norm[q] * c + nr.Z()) / (c + 1);
+                norm[q] = (norm[q] * c + (float) nr.Z()) / (c + 1);
                 q ++;
             }
         }
