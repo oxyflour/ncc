@@ -13,7 +13,6 @@
 #include <Geom_BSplineCurve.hxx>
 
 #include <BRepAdaptor_Surface.hxx>
-#include <BRepAdaptor_HSurface.hxx>
 #include <BRepBuilderAPI_MakeFace.hxx>
 #include <BRepBndLib.hxx>
 #include <BRepGProp.hxx>
