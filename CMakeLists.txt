@@ -7,7 +7,7 @@ include_directories(${CMAKE_JS_INC})
 file(GLOB SOURCE_FILES src/*.cc src/**/*.cc)
 
 # you must have this before `add_library`
-link_directories(${CMAKE_SOURCE_DIR}/deps/occt-7.7/lib)
+link_directories(${CMAKE_SOURCE_DIR}/deps/occt/lib)
 
 add_library(${PROJECT_NAME} SHARED ${SOURCE_FILES} ${CMAKE_JS_SRC})
 set_target_properties(${PROJECT_NAME} PROPERTIES PREFIX "" SUFFIX ".node")
@@ -21,14 +21,14 @@ string(REPLACE "\n" "" NODE_ADDON_API_DIR ${NODE_ADDON_API_DIR})
 string(REPLACE "\"" "" NODE_ADDON_API_DIR ${NODE_ADDON_API_DIR})
 target_include_directories(${PROJECT_NAME} PRIVATE ${NODE_ADDON_API_DIR})
 
-target_include_directories(${PROJECT_NAME} PRIVATE deps/occt-7.7/include)
+target_include_directories(${PROJECT_NAME} PRIVATE deps/occt/include)
 IF (WIN32)
 target_link_libraries(${PROJECT_NAME} TKBin TKBinL TKBinTObj TKBinXCAF TKBO TKBool TKBRep TKCAF TKCDF TKD3DHost TKDCAF TKDFBrowser TKDraw TKernel TKFeat TKFillet TKG2d TKG3d TKGeomAlgo TKGeomBase TKHLR TKIGES TKIVtk TKIVtkDraw TKLCAF TKMath TKMesh TKMeshVS TKOffset TKOpenGl TKPrim TKQADraw TKRWMesh TKService TKShapeView TKShHealing TKStd TKStdL TKSTEP TKSTEP209 TKSTEPAttr TKSTEPBase TKSTL TKTInspector TKTInspectorAPI TKTObj TKTObjDRAW TKToolsDraw TKTopAlgo TKTopTest TKTreeModel TKV3d TKVCAF TKView TKViewerTest TKVInspector TKVRML TKXCAF TKXDEDRAW TKXDEIGES TKXDESTEP TKXMesh TKXml TKXmlL TKXmlTObj TKXmlXCAF TKXSBase TKXSDRAW)
 string(REPLACE "/" "\\" PROJECT_BINARY_DIR_WIN ${PROJECT_BINARY_DIR})
 string(REPLACE "/" "\\" CMAKE_SOURCE_DIR_WIN ${CMAKE_SOURCE_DIR})
 add_custom_command(TARGET ${PROJECT_NAME} POST_BUILD 
   COMMAND cmd /c copy 
-     "${CMAKE_SOURCE_DIR_WIN}\\deps\\occt-7.7\\bin\\*"
+     "${CMAKE_SOURCE_DIR_WIN}\\deps\\occt\\bin\\*"
      "${PROJECT_BINARY_DIR_WIN}\\$<CONFIGURATION>\\"
   COMMENT "Copying to output directory")
 ELSE()

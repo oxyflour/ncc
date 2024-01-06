@@ -3,3 +3,4 @@ build/
 node_modules/
 deps/occt-7.4/
 deps/occt-7.7/
+deps/occt/
